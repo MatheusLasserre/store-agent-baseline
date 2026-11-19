@@ -61,8 +61,9 @@ admins (the owner), who sign in with Supabase Auth.
     session from the request's cookies with `@supabase/ssr`, verifies it with
     `getClaims()` (never trust `getSession()` on the server), and confirms the
     user is in the `store_admin` table.
-- Admins are added by inserting into `store_admin`, by the technical helper.
-  There is no public sign-up; disable sign-ups in the Supabase project.
+- You add an admin by creating the Supabase Auth user and inserting its id
+  into `store_admin`, when Product asks. There is no public sign-up; keep
+  sign-ups disabled in the Supabase project.
 
 ## Queries
 

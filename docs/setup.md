@@ -1,43 +1,96 @@
-# Setup and deploys
+# Setup, access and deploys
 
-This file is for the technical helper who sets the accounts up once. The
-agent reads it to know what exists, and never does these steps itself: they
-create accounts, cost money or handle production secrets.
+You set the store's services up yourself, together with Product. They do
+only what needs a person (create the account, confirm an email, enter a
+card); you do everything else and end each step holding the access you need
+to never send them back. [PERSONA.md](../PERSONA.md#when-something-outside-the-code-is-needed)
+says how to guide them and how to handle what they give you.
+
+Don't set everything up on day one. Do each service when the work first
+needs it, in this order, and keep the status table current.
 
 Prices and limits below were checked on 2026-11-19. Check the linked pages
-again before relying on them.
+again before quoting a price to Product.
 
-## One-time checklist
+## Status
 
-1. **GitHub.** Create the store's repository from this baseline. The owner
-   needs access; the coding agent works in a clone of it.
-2. **Supabase.** Create a project in the São Paulo region. Disable public
-   sign-ups (Authentication settings). Copy the project URL, the publishable
-   key and the secret key. On the machine the agent runs on, run
-   `npx supabase login` and `npx supabase link` once.
-3. **Cloudflare.** Create an account and connect the GitHub repository with
-   Workers Builds, production branch `main`. Each push to `main` then builds
-   and deploys.
-4. **Mercado Pago.** The owner's account, with an application for Checkout
-   Pro. Copy the test and production access tokens. Configure the webhook
-   (Suas integrações → Webhooks, event Pagamentos) to
-   `https://<domain>/api/mercado-pago/webhook` and copy its secret.
-5. **Resend.** Create an account, verify the store's domain, create an API
-   key.
-6. **Domain.** Point it at the Worker (Cloudflare custom domain).
-7. **Secrets.** Set every variable from [stack.md](stack.md#configuration-and-secrets)
-   in Cloudflare (Worker settings → Variables and Secrets, or
-   `npx wrangler secret put <NAME>`). For local work, copy
-   `.dev.vars.example` to `.dev.vars` with the test values.
-8. **First admin.** Create the owner's user in Supabase Auth and insert its
-   id into `store_admin`.
-9. **Before launch.** A test purchase of an ebook and of a printed book, end
-   to end, in production with a real low-value payment, then a refund. The
-   owner's privacy and terms text is in place.
+Update this table as access is gained. Never write a secret here: only
+whether it exists and where it's stored.
+
+| Service | Account | Your access | Notes |
+| --- | --- | --- | --- |
+| GitHub | not yet | not yet | |
+| Cloudflare | not yet | not yet | |
+| Supabase | not yet | not yet | |
+| Mercado Pago | not yet | not yet | |
+| Resend | not yet | not yet | |
+| Domain | not yet | not yet | |
+
+## The services
+
+For each: what Product does, the access you get, and what you then do alone.
+
+### GitHub (first)
+
+- **Product:** creates a GitHub account if they have none.
+- **Access:** `gh auth login` (opens their browser).
+- **You:** create the store's private repository, push, and manage it from
+  then on.
+
+### Supabase (when the first table is needed)
+
+- **Product:** creates the account (signing in with GitHub is the shortest
+  path).
+- **Access:** `npx supabase login` (opens their browser).
+- **You:** create the project in the São Paulo region with the CLI, link it,
+  disable public sign-ups, read the project URL and keys, apply migrations,
+  create storage buckets. Create Product's admin user and add it to
+  `store_admin`; they set their own password through the reset email.
+
+### Cloudflare (when there is something to show)
+
+- **Product:** creates the account and confirms their email.
+- **Access:** `npx wrangler login` (opens their browser).
+- **You:** deploy, set every secret with `npx wrangler secret put`, add Cron
+  Triggers. Connecting the repository so pushes to `main` deploy on their own
+  (Workers Builds) needs a few clicks in the dashboard: guide Product through
+  them once. Until then, deploy with `npm run deploy`.
+
+### Mercado Pago (when checkout is built)
+
+- **Product:** uses or creates their Mercado Pago account, since the money
+  lands there. In Suas integrações they create an application for Checkout
+  Pro; you give the exact clicks.
+- **Access:** the application's test and production access tokens, and the
+  webhook secret, pasted into the git-ignored file you prepared.
+- **You:** configure the webhook URL if the API allows it (otherwise guide
+  the clicks: Webhooks, event Pagamentos,
+  `https://<domain>/api/mercado-pago/webhook`), store the secrets in
+  Cloudflare, run the test purchases.
+
+### Resend (when the first email is built)
+
+- **Product:** creates the account.
+- **Access:** an API key with full access, pasted into the git-ignored file.
+- **You:** add and verify the sending domain through the API, add the DNS
+  records it asks for, store the key in Cloudflare.
+
+### Domain (before launch)
+
+- **Product:** chooses the name and pays for it. This is a product and money
+  decision: offer two or three available options with prices.
+- **Access:** simplest is to register or transfer the domain in Cloudflare,
+  where you already have access. A domain kept elsewhere needs Product to
+  change its nameservers to Cloudflare once; give the exact steps.
+- **You:** DNS records, the Worker's custom domain, email DNS for Resend.
+
+If a CLI sign-in isn't possible on the machine you run on, ask for an API
+token instead, with only the permissions the store needs, and say exactly
+which boxes to tick.
 
 ## Creating the app
 
-The first task for the agent, in an empty clone of the repository:
+In an empty clone of the repository:
 
 ```sh
 npm create cloudflare@latest -- . --framework=tanstack-start
@@ -53,19 +106,31 @@ the Supabase CLI, following [stack.md](stack.md) and
 
 ## Deploys
 
-- Code: push to `main`. Cloudflare builds and deploys it.
+- Code: push to `main` (or `npm run deploy` before Workers Builds is
+  connected).
 - Database: `npx supabase db push`, before the push that needs it
   ([database.md](database.md#migrations)).
-- A bad deploy is rolled back from the Cloudflare dashboard (Deployments →
-  roll back), then fixed with a new commit. Never force-push `main`.
+- A bad deploy: roll back with `npx wrangler rollback`, tell Product in one
+  sentence if customers were affected, then fix with a new commit. Never
+  force-push `main`.
+
+## Before launch
+
+Yours to run, not Product's: a purchase of an ebook and of a printed book,
+end to end, in production with a real low-value payment, then a refund
+(Product approves the payment in their own Mercado Pago app). Product's
+privacy and terms text is in place. A database export exists.
 
 ## What it costs, and the limits that matter
 
+Costs are Product's decision; the technical judgment of when a paid plan is
+needed is yours. Bring it to them as a price and a consequence.
+
 | Service | Plan to start on | Watch for |
 | --- | --- | --- |
-| Cloudflare Workers | Free: 100,000 requests a day, 10 ms of CPU per request. Paid starts at US$ 5 a month. | Server rendering can exceed 10 ms of CPU. If the logs show CPU-limit errors, move to Paid. Whether Cloudflare's terms allow a shop on the free plan was not confirmed: read the terms, or start on Paid. |
-| Supabase | Free | A free project is **paused after about a week of low activity** and its site stops working until someone resumes it in the dashboard. A few requests a day normally prevent that, with no guarantee. The free plan also has **no automatic backups**. Once the store takes real orders, Pro (from US$ 25 a month) is the safe choice. |
-| Mercado Pago | No monthly fee | A fee per sale, by payment method. |
+| Cloudflare Workers | Free: 100,000 requests a day, 10 ms of CPU per request. Paid starts at US$ 5 a month. | Server rendering can exceed 10 ms of CPU. If the logs show CPU-limit errors, recommend Paid. Whether Cloudflare's terms allow a shop on the free plan was not confirmed when this was written: read the current terms before launch and recommend Paid if they don't. |
+| Supabase | Free | A free project is **paused after about a week of low activity** and the store stops working until it's resumed. A few requests a day normally prevent that, with no guarantee. The free plan also has **no automatic backups**. Once the store takes real orders, recommend Pro (from US$ 25 a month). |
+| Mercado Pago | No monthly fee | A fee per sale, by payment method. Product should know it before setting prices. |
 | Resend | Free tier | Daily and monthly sending limits. |
 
 Sources:
@@ -74,6 +139,6 @@ Sources:
 [Supabase pricing](https://supabase.com/pricing),
 [Supabase project pausing](https://supabase.com/docs/guides/platform/free-project-pausing).
 
-On Supabase Free, keep the store awake with a daily Cron Trigger that runs
-one cheap query, and export the database on a schedule the helper sets up.
-Both are stopgaps until Pro.
+While on Supabase Free, you keep the store awake with a daily Cron Trigger
+that runs one cheap query, and you export the database on a schedule to
+private storage. Both are stopgaps until Pro.

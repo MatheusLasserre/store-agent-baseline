@@ -71,8 +71,8 @@ Customers buy without creating an account.
 - The owner ships the parcel themselves, then marks the order as shipped in
   the admin and may enter a tracking code. The customer gets an email with it.
 - Live carrier quotes and label printing (Correios, Melhor Envio) are not in
-  the baseline. Build them only when the owner asks; they need an account
-  from the technical helper.
+  the baseline. Build them only when the owner asks; they need a carrier
+  account, set up with Product as [PERSONA.md](../PERSONA.md) describes.
 
 ## Admin
 
