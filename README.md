@@ -78,7 +78,7 @@ and accept its terms). Verify every tool before moving on.
 Go through [the services](docs/setup.md#the-services) with Product: GitHub,
 Supabase, Cloudflare, Mercado Pago, Resend, and the domain if they have or
 want one now. For each, they create the account and you get lasting access
-in the same step. Update the status tables in `docs/setup.md`.
+in the same step, including a connector where a trustworthy one exists. Update the status tables in `docs/setup.md`.
 
 ### 5. Create the project folder and the store's repository
 

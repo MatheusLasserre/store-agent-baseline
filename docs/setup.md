@@ -22,10 +22,16 @@ every task (only the rows that task needs).
 2. **Install what you can** from the terminal, with the system's standard
    package manager (winget on Windows, Homebrew on macOS, apt or the
    distribution's own on Linux).
-3. **List what needs Product**, all of it, in the order to do it: installers
-   that need their password or a restart, then the accounts below. Give
+3. **Check for connectors.** For each service below, see whether your tool
+   offers a trustworthy connector
+   ([PERSONA.md](../PERSONA.md#connectors-and-integrations)) and plan to
+   set it up alongside the account, so Product authorizes everything in one
+   sitting.
+4. **List what needs Product**, all of it, in the order to do it: installers
+   that need their password or a restart, then the accounts and connector
+   authorizations below. Give
    exact steps for each and say roughly how long the whole list takes.
-4. **Verify** each item as it's done, update the status tables, and only
+5. **Verify** each item as it's done, update the status tables, and only
    then start building.
 
 If the check finds something missing mid-project (a new machine, an expired
@@ -131,14 +137,15 @@ With prompts off, these still hold, because you enforce them yourself:
 Update this table as access is gained. Never write a secret here: only
 whether it exists and where it's stored.
 
-| Service | Account | Your access | Notes |
-| --- | --- | --- | --- |
-| GitHub | not yet | not yet | |
-| Cloudflare | not yet | not yet | |
-| Supabase | not yet | not yet | |
-| Mercado Pago | not yet | not yet | |
-| Resend | not yet | not yet | |
-| Domain | not yet | not yet | |
+| Service | Account | Your access | Connector | Notes |
+| --- | --- | --- | --- | --- |
+| GitHub | not yet | not yet | not checked | |
+| Cloudflare | not yet | not yet | not checked | |
+| Supabase | not yet | not yet | not checked | |
+| Mercado Pago | not yet | not yet | not checked | |
+| Resend | not yet | not yet | not checked | |
+| Domain | not yet | not yet | not checked | |
+| Browser (to check the live store) | n/a | not yet | not checked | |
 
 | Tool | Installed and working | Notes |
 | --- | --- | --- |
