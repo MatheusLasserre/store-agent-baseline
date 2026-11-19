@@ -63,7 +63,9 @@ change. Don't take it to Product.
    secret, print one, or put one in code that reaches the browser.
 3. **The browser is never trusted.** Prices, totals, shipping cost, stock and
    "is this order paid" are computed or checked on the server from the
-   database. An order becomes paid only from the verified webhook
+   database. An order becomes paid only from a verified payment, is never
+   processed twice, and nothing is delivered without it. Payment code gets
+   double the care and the full money tests on every change
    ([docs/payments.md](docs/payments.md)).
 4. **This runs on Cloudflare Workers, not Node.** No filesystem, no
    long-running process, no Node-only libraries

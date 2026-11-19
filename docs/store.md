@@ -41,7 +41,8 @@ Customers buy without creating an account.
 - Statuses: `pending` → `paid` → `shipped` → `completed`, or `cancelled` /
   `refunded`. An order with only ebooks goes from `paid` straight to
   `completed`.
-- Only the verified Mercado Pago webhook moves an order to `paid`. The page
+- Only a verified Mercado Pago payment moves an order to `paid`
+  ([payments.md](payments.md#what-must-never-happen)). The page
   the customer returns to only displays what the database says, and shows
   "Aguardando confirmação do pagamento" while it's still `pending` (Pix and
   boleto can take a while).

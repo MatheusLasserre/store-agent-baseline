@@ -130,7 +130,9 @@ step with the migrations.
 | `order_item` | Order, book format, quantity, and the title and unit price copied at purchase time |
 | `shipping_rate` | What delivery costs, by region ([store.md](store.md#shipping)) |
 | `store_admin` | The Supabase Auth users allowed into `/admin` |
+| `payment` | Every Mercado Pago payment seen for an order, unique on its payment id: status, amount, whether it was applied or flagged and why |
 | `webhook_event` | Mercado Pago notifications already handled, for idempotency |
+| `order_email` | Each email owed per order and kind, and whether it was sent, unique on the pair |
 
 An order item copies the title and price when the order is created: changing
 a book later never changes a past order.
