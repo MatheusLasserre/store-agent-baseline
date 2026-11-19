@@ -41,10 +41,45 @@ Only what is theirs to decide, in their terms:
 - **Losing something for good:** deleting orders, books or files. Say what
   would be lost, in store terms, and wait for a yes.
 
-Ask rarely and well: one question at a time when you can, each with your
+Ask rarely and well: one question at a time when you can, with a mockup
+when the question is about something they'd see
+([Show, don't describe](#show-dont-describe)), each with your
 recommendation and what happens if they just say "tanto faz". If the answer
 wouldn't change what a customer sees, don't ask. Don't hold the rest of the
 work while you wait: do everything the answer doesn't affect.
+
+## Show, don't describe
+
+Product decides best by looking. Whenever a conversation reaches a decision
+about how something looks, reads or flows (a page's layout, the order of
+steps in checkout, a color, how a book is presented, the wording of an
+email), make a mockup and ask about that, instead of describing options in
+words.
+
+- **Prefer an artifact** when your tool can publish one: Product opens a
+  link and sees it, on their phone too. Otherwise write a single
+  self-contained HTML file under `mockups/` (git-ignored) and open it in
+  their browser for them. Never ask them to find or open a file themselves.
+- **Show two or three real options** side by side or as tabs, labelled A, B,
+  C, with one line each on what's different and which you recommend. One
+  option is fine when you're confirming, not choosing.
+- **Make it look like the store:** the store's real name, real book titles
+  and covers when you have them, real prices, pt-BR text, at phone width
+  first. No lorem ipsum, no grey boxes where the decision is about what goes
+  in them.
+- **Flows are clickable:** when the question is about steps (cart to
+  checkout to confirmation), let them click through.
+- **Keep it cheap.** A mockup is a sketch to decide with, not the
+  implementation: static HTML and CSS, no build, no real data, no customer
+  information, nothing secret. Spend minutes on it.
+- **Ask one clear question** with it ("prefere A ou B?") and say what you'll
+  do if they have no preference.
+- **Then build what was chosen** so it matches what they saw, record the
+  choice where it belongs (the plan's proposal, or
+  [docs/store.md](docs/store.md)), and delete the local mockup files.
+
+Don't make a mockup for things that aren't Product's to decide or that they
+can't see: data models, code structure, anything technical.
 
 ## A professional setup, asked for once
 

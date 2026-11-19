@@ -39,7 +39,8 @@ change. Don't take it to Product.
 - Product decides what the store does, says and costs. You decide everything
   technical and never hand a technical question back.
 - Talk to Product in Brazilian Portuguese, in plain words. Code, identifiers,
-  comments, commit messages and these docs are in English. Everything a
+  comments, commit messages and these docs are in English; the one exception
+  is a plan's `proposta.md`, which is written for Product. Everything a
   customer or Product reads on screen is in pt-BR.
 - Ask before coding only when a request can be read two ways that would look
   different to a customer. Otherwise decide, and state the assumption.
@@ -110,18 +111,43 @@ something works that you didn't run.
 ## Larger pieces of work
 
 A request that will take more than a session, or touches several areas
-(checkout, a new kind of product, a redesign), gets a written plan first:
+(checkout, a new kind of product, a redesign), is planned before it's built.
+The plan has two documents in `docs/plans/<month-day-name>/`, for two
+readers:
 
-- Put it in `docs/plans/<month-day-name>/plan.md`: what Product asked for in
-  their words, what will be built, the steps in order, and a short progress
-  list you tick as you go. Where you depart from what was literally asked,
-  say so and why, rather than quietly doing something different.
-- Tell Product the plan in store terms (what they'll get, in what order,
-  what you need from them) and get their yes on the behavior before
-  building. The technical content of the plan is yours and isn't up for
-  their approval.
-- When the work is done, move anything lasting into the permanent docs and
-  delete the plan folder. Git keeps it.
+**`proposta.md`, for Product, in pt-BR.** This is what Product reviews and
+approves. It has no technical content at all:
+
+- *O que você pediu*: their request, in their words.
+- *O que você e seus clientes vão ter*: what will exist when it's done,
+  described as someone using the store would see it.
+- *Como vai ficar*: the mockups ([PERSONA.md](PERSONA.md#show-dont-describe)),
+  with the option they chose marked once they choose.
+- *Em que ordem*: the steps as visible milestones ("primeiro a página do
+  livro, depois o carrinho").
+- *O que eu preciso de você*: decisions, texts, images, accounts, anything
+  that costs money, with the price.
+- *O que fica de fora*: what this doesn't include, so nothing is assumed.
+- *Perguntas*: the open product questions, each with your recommendation.
+
+Product doesn't open files in the repository. Show them the proposal the
+same way as a mockup: as an artifact, or a page you open for them. Record
+their answer and the date at the top of `proposta.md` ("Aprovado em ...",
+with any changes they asked for), and don't start building before it.
+
+**`plan.md`, for you, in English.** The technical plan: the steps in order,
+the data and modules involved, the risks, and a progress list you tick as
+you go. It isn't shown to Product and isn't up for their approval. Where it
+departs from what was literally asked, the proposal says so in store terms.
+
+If what's being built changes along the way in a way Product would notice,
+update the proposal and tell them; don't let it drift from what they
+approved. When the work is done, move anything lasting into the permanent
+docs ([docs/store.md](docs/store.md) for what the store now does) and
+delete the plan folder. Git keeps it.
+
+A small request needs no proposal: say in a sentence or two what you'll do,
+show a mockup if it changes how something looks, and build it.
 
 ## Commits and branches
 
@@ -191,7 +217,8 @@ abandoned.
   local Supabase stack (`npx supabase stop`). Confirm with the process and
   container lists, not from memory.
 - Remove what you created outside version control: temporary folders and
-  scaffolds, downloaded files, `.prod.vars`, scratch scripts.
+  scaffolds, downloaded files, `.prod.vars`, scratch scripts, and mockups
+  whose decision has been made.
 - Remove what you created on outside services for testing (test buyers,
   test orders, uploaded test files), or list it in the backlog if it has to
   stay.
