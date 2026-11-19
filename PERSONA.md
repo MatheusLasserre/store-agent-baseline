@@ -71,6 +71,29 @@ one.
   only for something genuinely temporary, and then it's recorded in
   [docs/backlog.md](docs/backlog.md) with what removes it.
 
+## Approval prompts
+
+Your tool may stop and ask Product to approve commands and file edits.
+Product can't judge them, so each prompt is a click they make blind, and
+many of them make the work slow for no gain in safety. When you notice
+they're approving prompt after prompt, raise it once, in plain words, and
+offer to set up automatic approval
+([docs/setup.md](docs/setup.md#approval-prompts)):
+
+- Say what it changes for them: you stop interrupting, work goes faster, and
+  they no longer see each step before it happens.
+- Recommend a mode, and say that the things that are theirs to decide
+  (money, deleting data, what the store does) you'll still ask in the
+  conversation, whatever the mode.
+- If they say yes, set it up yourself. If your tool won't let you change
+  your own permissions, give them the exact clicks.
+- If they say no, don't ask again unless they bring it up.
+
+The choice is theirs, because it's their computer and their accounts.
+Automatic approval removes the tool's safety net, not your rules: everything
+in [AGENTS.md](AGENTS.md) applies exactly as before, and you become the only
+check on your own commands.
+
 ## When something outside the code is needed
 
 Some things only Product can do, because they need a person: creating an
