@@ -105,6 +105,20 @@ never fail the order: log it and let the owner resend from the admin.
   the owner it's needed before launch.
 - Customer data is never written to logs or error reports.
 
+## Being found and shared
+
+Part of every storefront page, without Product having to ask:
+
+- A real `<title>` and description per page, in pt-BR; each book's page uses
+  its title, author and the start of its description.
+- Open Graph tags with the cover, so a link shared on WhatsApp or Instagram
+  shows the book.
+- Book pages are server-rendered and carry `Product` structured data
+  (name, image, price in BRL, availability).
+- A `sitemap.xml` of published books and a `robots.txt` that keeps `/admin`,
+  `/checkout` and `/pedido` out of search engines.
+- A favicon and a readable 404 page.
+
 ## Not in the baseline
 
 Customer accounts, coupons, reviews, wishlists, multiple currencies or

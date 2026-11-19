@@ -92,6 +92,29 @@ Expected variables (extend the list here when one is added):
 
 ## Conventions that apply everywhere
 
+- **TypeScript is strict.** `strict` on, plus `noUncheckedIndexedAccess`.
+  No `any`, no `@ts-ignore`, no non-null `!`. A type cast (`as`) is a last
+  resort with a one-line reason next to it. Data from outside the code (a
+  request, a webhook, the database, local storage) is parsed with Zod before
+  it's used, never cast.
+- **File names:** React components are `PascalCase.tsx`, one main component
+  per file. Hooks are `useSomething.ts`. Everything else is `kebab-case.ts`.
+  Route files follow the router's own naming.
+- **Exports:** named exports only, except where the framework requires a
+  default. No barrel files (`index.ts` that re-exports a folder): import
+  from the file that defines the thing.
+- **Identifiers:** `camelCase` values and functions, `PascalCase` types and
+  components, `SCREAMING_SNAKE_CASE` only for environment variables.
+  Booleans read as a question (`isPaid`, `hasStock`). Handlers are
+  `handleSomething`; the props that receive them are `onSomething`.
+  Database fields keep their `snake_case` names through the server; map to
+  `camelCase` only if a module's `schemas.ts` does it in one place.
+- **Comments** say why, not what. No commented-out code, and no `TODO`
+  left in code: unfinished work goes to [backlog.md](backlog.md).
+- **Logging:** on the server, one line per event with a stable event name
+  and ids (`order_paid order_id=...`). Never a name, email, address, token
+  or key.
+
 - **Money is integer cents** (`price_cents: 4990` is R$ 49,90), in the
   database, in code and across the wire. Format only at display, with
   `Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })` through
