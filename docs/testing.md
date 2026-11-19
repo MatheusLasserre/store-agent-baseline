@@ -44,6 +44,21 @@ notification changes nothing.
 - Test data is synthetic. Never copy real customer data into a test or
   fixture.
 
+## Keeping tests honest
+
+- Fake responses for outside services are typed against the same schemas
+  the production code parses with (`satisfies`), so a fake can't drift from
+  what the code expects.
+- Tests that depend on time use fixed dates or an injected clock, never the
+  real current date.
+- Test the failure and the recovery, not only the happy path: the error
+  shown, the retry that then works, the last data staying visible when a
+  refresh fails.
+- In local development and tests, outside services point at fakes or at an
+  address that refuses connections, so nothing can reach a real payment or
+  send a real email by accident. Local and test environments never use
+  production keys, and production values are never copied into local files.
+
 ## Before a push to `main`
 
 Run only what the change needs, narrowest first:

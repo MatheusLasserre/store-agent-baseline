@@ -16,6 +16,7 @@ same rules: edit those two, never `CLAUDE.md`.
 
 | Area | Read |
 | --- | --- |
+| The approaches behind every decision | [docs/principles.md](docs/principles.md) |
 | Stack, runtime limits, secrets | [docs/stack.md](docs/stack.md) |
 | Folders, routes, modules, forms, React patterns | [docs/structure.md](docs/structure.md) |
 | Database, migrations, storage, access rules | [docs/database.md](docs/database.md) |
@@ -26,8 +27,9 @@ same rules: edit those two, never `CLAUDE.md`.
 | Parked work and things waiting on Product | [docs/backlog.md](docs/backlog.md) |
 | Starting a new store from this baseline (first session only) | [README.md](README.md) |
 
-When these docs don't decide something technical, choose the simplest option
-that fits the stack and write the decision into the relevant doc in the same
+When these docs don't decide something technical, decide it the way
+[docs/principles.md](docs/principles.md) would, choose the simplest option
+that fits the stack, and write the decision into the relevant doc in the same
 change. Don't take it to Product.
 
 ## Working with Product
@@ -79,7 +81,9 @@ change. Don't take it to Product.
 
 ## How to work on a request
 
-0. **Preflight.** Check that the tools and accounts this task needs are in
+0. **Clean start, then preflight.** Check for leftovers from earlier
+   sessions ([A clean workspace](#a-clean-workspace)). Then check that the
+   tools and accounts this task needs are in
    place ([docs/setup.md](docs/setup.md#preflight)). Install what you can;
    ask Product for everything else in one list, now, before building. Don't
    work around a missing tool or account.
@@ -94,12 +98,30 @@ change. Don't take it to Product.
    rest of what [docs/testing.md](docs/testing.md) asks for.
 6. **Document.** When behavior or a convention changes, update the doc that
    owns it in the same change. A doc describes the store as it is now.
-7. **Summarize.** Tell Product what changed for the store, in pt-BR, and
+7. **Clean up.** Leave nothing uncommitted and nothing running
+   ([A clean workspace](#a-clean-workspace)).
+8. **Summarize.** Tell Product what changed for the store, in pt-BR, and
    anything left undone. The commands you ran and their results go in the
    commit message, not in the chat.
 
 Report honestly: if a check fails or a step was skipped, say so. Never claim
 something works that you didn't run.
+
+## Larger pieces of work
+
+A request that will take more than a session, or touches several areas
+(checkout, a new kind of product, a redesign), gets a written plan first:
+
+- Put it in `docs/plans/<month-day-name>/plan.md`: what Product asked for in
+  their words, what will be built, the steps in order, and a short progress
+  list you tick as you go. Where you depart from what was literally asked,
+  say so and why, rather than quietly doing something different.
+- Tell Product the plan in store terms (what they'll get, in what order,
+  what you need from them) and get their yes on the behavior before
+  building. The technical content of the plan is yours and isn't up for
+  their approval.
+- When the work is done, move anything lasting into the permanent docs and
+  delete the plan folder. Git keeps it.
 
 ## Commits and branches
 
@@ -132,6 +154,72 @@ Branches: work that takes more than one sitting goes on a branch named
 `main` only when it's complete and checked. Half a feature never reaches
 `main`. Delete the branch after merging.
 
+## A clean workspace
+
+Product can't tell that a forgotten process is slowing their computer, that
+Docker is filling the disk, or that half a feature is sitting uncommitted.
+Nobody else will notice, so keeping the machine and the repository clean is
+your job, at both ends of every session.
+
+**One checkout.** Work in the primary checkout of the repository. Don't
+create extra git worktrees or second clones for ordinary work. If one is
+truly needed (two independent pieces of work at once), stop anything running
+in it and remove it in the same session, as soon as its branch is merged or
+abandoned.
+
+**Starting a session**, before the task's preflight:
+
+- `git status`, `git stash list`, `git branch -vv`, `git worktree list`:
+  find uncommitted changes, stashes, unmerged or unpushed branches and extra
+  worktrees left by an earlier session.
+- Read "In progress" in [docs/backlog.md](docs/backlog.md).
+- Look for what's still running from before: dev servers, `node`, `workerd`
+  and browser processes started by tests, Docker containers
+  (`docker ps -a`), and anything listening on the project's ports.
+- Deal with every leftover before starting new work: finish and commit it,
+  park it on a named branch with a backlog line, or remove it if it's
+  clearly disposable (a generated file, a merged branch, a crashed server).
+  Never silently throw away work that might matter; never build on top of
+  a dirty tree.
+
+**Finishing a session** (and before telling Product you're done):
+
+- Nothing uncommitted. Work that's complete is committed and pushed; work
+  that isn't is on a pushed branch, with a line under "In progress" in the
+  backlog saying what's left. No stashes.
+- Stop everything you started: dev servers, test runners, watchers, the
+  local Supabase stack (`npx supabase stop`). Confirm with the process and
+  container lists, not from memory.
+- Remove what you created outside version control: temporary folders and
+  scaffolds, downloaded files, `.prod.vars`, scratch scripts.
+- Remove what you created on outside services for testing (test buyers,
+  test orders, uploaded test files), or list it in the backlog if it has to
+  stay.
+- Delete merged local and remote branches; run `git worktree prune`.
+
+**Disk and memory**, as part of the monthly maintenance below or whenever
+the machine feels slow or a command fails for lack of space:
+
+- Check free disk space and the size of the project folder,
+  `node_modules`, `.wrangler`, the Playwright browser cache and Docker
+  (`docker system df`).
+- Remove this project's unused Docker images, stopped containers and
+  build cache. Never delete Docker volumes that hold the local database
+  without recreating it from migrations afterwards, and never touch
+  containers, images or files that belong to something other than this
+  project.
+- If disk is still short after cleaning, tell Product in plain words how
+  much is free and what you recommend.
+
+Cleanup is always scoped to what this project owns. Stop a process only
+when you can tell it's this project's (its command line and folder), never
+by name alone; remove only this project's containers and images. Never
+delete Product's own files to make room.
+
+Do all of this without asking. Tell Product only when they need to act
+(restart Docker Desktop, free up space) or when leftover work changes what
+they were expecting.
+
 ## Maintenance
 
 Product will never ask for upkeep, so it's yours to start. About once a
@@ -151,7 +239,10 @@ month, or at the start of a session when a month has passed:
 Add a dependency only when the stack in [docs/stack.md](docs/stack.md) can't
 do the job reasonably. Before adding one, confirm it runs on Cloudflare
 Workers. Note the addition and the reason in the commit message and in
-`docs/stack.md`. One lockfile, at the repository root, always committed.
+`docs/stack.md`. One lockfile, at the repository root, always committed. Versions are pinned
+exactly. Tools the project needs are dev dependencies run through `npx` or
+an npm script, never global installs, so the next session gets the same
+versions.
 
 ## Things that are Product's call
 

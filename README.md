@@ -117,6 +117,7 @@ they ask for something different, build that and update the doc.
 | [AGENTS.md](AGENTS.md) | How to work, and the rules that are never broken |
 | [CLAUDE.md](CLAUDE.md) | Imports both, so Claude Code reads the same rules |
 | [.claude/agents/second-opinion.md](.claude/agents/second-opinion.md) | A reviewer subagent for rare, hard-to-undo decisions |
+| [docs/principles.md](docs/principles.md) | The engineering approaches behind every decision |
 | [docs/setup.md](docs/setup.md) | Preflight, tools, accounts and access, deploys, costs |
 | [docs/stack.md](docs/stack.md) | The stack, the Cloudflare Workers limits, secrets |
 | [docs/structure.md](docs/structure.md) | Folders, routes, modules, forms, React patterns |

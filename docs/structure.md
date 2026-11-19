@@ -23,6 +23,7 @@ src/
 ├── components/layout/      PageHeader, StoreLayout, AdminLayout
 ├── lib/                    Small shared helpers (money, dates, errors, form)
 └── server/                 Server-only plumbing: env.server.ts, supabase.server.ts
+scripts/                    doctor, dev and seed scripts (see setup.md)
 supabase/migrations/        SQL migrations
 docs/                       These docs
 ```
@@ -96,6 +97,14 @@ handlers, move that into `use<Feature>PageController(search)`. The route
 passes `Route.useSearch()` in; the hook returns view-ready data, loading
 flags and stable handlers. The route owns typing and search validation, the
 hook owns behavior.
+
+## Browser storage
+
+Anything kept in the browser (the cart, a dismissed notice) goes through one
+module, `src/lib/storage.ts`, which lists every key with what it holds and
+when it's cleared. No other file touches `localStorage` or `sessionStorage`,
+and a test enforces that. Values read back are parsed with Zod: storage is
+outside data. Never store personal data or anything secret there.
 
 ## Forms
 

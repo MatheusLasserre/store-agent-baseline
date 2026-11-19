@@ -31,6 +31,26 @@ every task (only the rows that task needs).
 If the check finds something missing mid-project (a new machine, an expired
 sign-in), stop and fix it the same way before continuing.
 
+The first thing you build in a new store is the tooling for this, so every
+later session starts with one command:
+
+| Script | Does |
+| --- | --- |
+| `npm run doctor` | Read-only. Checks every row of the tools table, the sign-ins, free disk space and the leftovers listed in [AGENTS.md](../AGENTS.md#a-clean-workspace). Prints one line per problem and changes nothing. |
+| `npm run dev:up` | Starts the local database, applies migrations, loads the synthetic seed data and starts the dev server. Fails with a clear message if a port is already taken, rather than attaching to whatever is there. Safe to run twice. |
+| `npm run dev:down` | Stops what `dev:up` started, and only that. Keeps the local data. |
+| `npm run dev:status` | Says what's running, on which ports. |
+
+Write them to work on Windows, macOS and Linux (Node scripts, not shell
+scripts). The seed data is synthetic and obviously fake (`ana@example.test`),
+with fixed dates.
+
+Things only Product can do are numbered in this file (P1, P2, ...) under
+[The services](#the-services) as you write their exact steps, and the
+doctor script names the number when one is missing ("falta P3: entrar no
+Cloudflare"). Then a message to Product can simply say which numbers are
+left.
+
 ### Tools on the machine
 
 | Tool | Why | Usually needs Product? |
@@ -219,6 +239,10 @@ shadcn/ui, Biome, Vitest, Playwright and the Supabase CLI, following
   connected).
 - Database: `npx supabase db push`, before the push that needs it
   ([database.md](database.md#migrations)).
+- The app exposes `/api/health`: it answers with the commit it was built
+  from and whether the database responds, and on failure a plain 503 with no
+  details. After every deploy, read it and confirm the commit is the one you
+  pushed before telling Product the change is live.
 - A bad deploy: roll back with `npx wrangler rollback`, tell Product in one
   sentence if customers were affected, then fix with a new commit. Never
   force-push `main`.

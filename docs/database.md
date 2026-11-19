@@ -34,6 +34,13 @@ system gave them.
   deployed app must keep working between the migration and the next deploy.
   Renaming or removing something that holds data follows rule 6 in
   [AGENTS.md](../AGENTS.md).
+- Add first, use later, remove last: the release that removes or renames
+  something comes after the release that stopped using it.
+- Take a database export before any migration that changes or removes
+  existing data. Run long data changes as their own step, not inside a
+  schema migration.
+- Never write or rely on "down" migrations. A bad migration is fixed with a
+  new one.
 - After a migration, regenerate the database types
   (`npx supabase gen types typescript --local > src/server/database.types.ts`)
   and commit them. Never edit the generated file.
@@ -88,6 +95,25 @@ Ebook files are never public and their paths never reach the browser. A
 download is a short-lived signed URL created by the server after it has
 checked that the order is paid ([store.md](store.md#ebooks)). Uploads happen
 only from admin functions.
+
+## Backups and restores
+
+- Know what protects the data at each stage and say it plainly in
+  [setup.md](setup.md): on Supabase Free there are no automatic backups, so
+  the scheduled export you set up is the only copy.
+- A backup isn't one until it has been checked: after each export, confirm
+  the file is complete and readable, and only then remove older ones. Keep
+  the latest 14.
+- Exports contain customers' personal data. They go to private storage,
+  never into the repository, a public bucket or a chat.
+- Restore by loading into a new, separate database and comparing it (table
+  counts, the latest orders) before anything points at it. Never restore
+  over the live database, and never restore just because something looks
+  empty: find out why first. Switching the store to restored data is
+  Product's call, in store terms ("perderemos os pedidos feitos depois de
+  terça").
+- Practice a restore into a scratch database before launch and a couple of
+  times a year.
 
 ## Starting schema
 
