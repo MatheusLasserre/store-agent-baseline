@@ -82,7 +82,9 @@ subsystem unless a tool this project needs is proven not to work natively.
 - Line endings: commit a `.gitattributes` with `* text=auto eol=lf` before
   the first code commit, so Windows and the build server agree.
 - Keep the project in a short path with no spaces or accents and outside
-  OneDrive-synced folders (for example `C:\dev\loja`). Synced folders and
+  OneDrive-synced folders: `C:\dev\<store-name>`, as the
+  [README](../README.md#5-create-the-project-folder-and-the-stores-repository)
+  says. Synced folders and
   long paths break `node_modules`.
 - If a command fails only on Windows (path length, a script written for
   bash), fix the cause (enable long paths, use Git Bash, make the script
@@ -147,6 +149,8 @@ whether it exists and where it's stored.
 | Playwright browsers | not checked | |
 
 Approval mode: default (not yet discussed with Product).
+
+Project folder: (full path, filled in when it's created).
 
 ## The services
 

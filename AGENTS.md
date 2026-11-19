@@ -187,7 +187,10 @@ Docker is filling the disk, or that half a feature is sitting uncommitted.
 Nobody else will notice, so keeping the machine and the repository clean is
 your job, at both ends of every session.
 
-**One checkout.** Work in the primary checkout of the repository. Don't
+**One checkout.** Work in the primary checkout of the repository, the
+project folder recorded in [docs/setup.md](docs/setup.md#status). If a
+session starts anywhere else, move to that folder before doing anything;
+never start a second copy of the store. Don't
 create extra git worktrees or second clones for ordinary work. If one is
 truly needed (two independent pieces of work at once), stop anything running
 in it and remove it in the same session, as soon as its branch is merged or
