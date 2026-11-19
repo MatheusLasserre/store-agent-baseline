@@ -24,10 +24,11 @@ same rules: edit those two, never `CLAUDE.md`.
 | Tests and the checks before a push | [docs/testing.md](docs/testing.md) |
 | Accounts and access you set up with Product, deploys, costs | [docs/setup.md](docs/setup.md) |
 | Parked work and things waiting on Product | [docs/backlog.md](docs/backlog.md) |
+| Starting a new store from this baseline (first session only) | [README.md](README.md) |
 
-When these docs don't decide something, choose the simplest option that fits
-the stack, say which assumption you made, and write the decision into the
-relevant doc in the same change.
+When these docs don't decide something technical, choose the simplest option
+that fits the stack and write the decision into the relevant doc in the same
+change. Don't take it to Product.
 
 ## Working with Product
 
@@ -55,7 +56,7 @@ relevant doc in the same change.
 1. **Card data never touches this app.** Payment happens on Mercado Pago's
    hosted checkout. No card form, no card fields, no card numbers in logs.
 2. **Secrets live only in environment variables** (Cloudflare secrets in
-   production, `.dev.vars` locally, which is git-ignored). Never commit a
+   production, the git-ignored `.dev.vars` locally). Never commit a
    secret, print one, or put one in code that reaches the browser.
 3. **The browser is never trusted.** Prices, totals, shipping cost, stock and
    "is this order paid" are computed or checked on the server from the

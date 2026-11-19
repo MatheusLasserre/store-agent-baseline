@@ -20,9 +20,8 @@ every task (only the rows that task needs).
    installed and signed in. Check each row of the tools table by running it
    (`git --version`, `docker info`, `gh auth status`, ...), not by assuming.
 2. **Install what you can** from the terminal, with the system's standard
-   package manager (Homebrew on macOS, winget on Windows, apt or the
-   distribution's own on Linux). On Windows, work inside WSL2: Docker and
-   the CLIs behave there as they do in production tooling.
+   package manager (winget on Windows, Homebrew on macOS, apt or the
+   distribution's own on Linux).
 3. **List what needs Product**, all of it, in the order to do it: installers
    that need their password or a restart, then the accounts below. Give
    exact steps for each and say roughly how long the whole list takes.
@@ -38,14 +37,36 @@ sign-in), stop and fix it the same way before continuing.
 | --- | --- | --- |
 | git, with name and email configured | Version history, deploys | No |
 | Node.js (the version pinned in `package.json`), through a version manager | Runs the app and all tooling | No |
-| Docker (Docker Desktop on macOS and Windows), running | The local database for development and tests | Yes: installer, password, sometimes a restart |
-| WSL2 (Windows only) | A Linux environment for everything above | Yes: restart |
+| Docker (Docker Desktop on Windows and macOS), running | The local database for development and tests | Yes: installer, administrator approval, a restart on Windows |
 | GitHub CLI (`gh`) | Repository, sign-in | Sign-in only |
 | Playwright browsers (`npx playwright install`) | End-to-end tests | No |
 | Supabase CLI and Wrangler | Come with the project (`npx`) | Sign-in only |
 
 Keep this table current: when the work needs a new tool, add it here and
 install it properly rather than doing without.
+
+### On Windows
+
+Product's machine is expected to be Windows. Work natively there, in the
+same environment you were started in; don't move the project into a Linux
+subsystem unless a tool this project needs is proven not to work natively.
+
+- Install with winget: `Git.Git`, a Node version manager, `GitHub.cli`,
+  `Docker.DockerDesktop`. Installs that need administrator approval show a
+  Windows prompt: tell Product to expect it and click "Sim".
+- Docker Desktop uses WSL2 underneath and sets it up itself. It needs one
+  restart, and Product must open Docker Desktop once and accept its terms.
+  It has to be running whenever you use the local database: check with
+  `docker info`, and if it isn't, ask Product to open it (and set it to
+  start with Windows).
+- Line endings: commit a `.gitattributes` with `* text=auto eol=lf` before
+  the first code commit, so Windows and the build server agree.
+- Keep the project in a short path with no spaces or accents and outside
+  OneDrive-synced folders (for example `C:\dev\loja`). Synced folders and
+  long paths break `node_modules`.
+- If a command fails only on Windows (path length, a script written for
+  bash), fix the cause (enable long paths, use Git Bash, make the script
+  cross-platform). That's yours to solve, not a question for Product.
 
 ### Accounts
 
@@ -73,7 +94,6 @@ whether it exists and where it's stored.
 | git | not checked | |
 | Node.js | not checked | |
 | Docker | not checked | |
-| WSL2 (Windows only) | not checked | |
 | GitHub CLI | not checked | |
 | Playwright browsers | not checked | |
 
@@ -113,7 +133,8 @@ For each: what Product does, the access you get, and what you then do alone.
   lands there. In Suas integrações they create an application for Checkout
   Pro; you give the exact clicks.
 - **Access:** the application's test and production access tokens, and the
-  webhook secret, pasted into the git-ignored file you prepared.
+  webhook secret, pasted into the git-ignored files you prepared (test values
+  in `.dev.vars`, production ones in `.prod.vars`).
 - **You:** configure the webhook URL if the API allows it (otherwise guide
   the clicks: Webhooks, event Pagamentos,
   `https://<domain>/api/mercado-pago/webhook`), store the secrets in
@@ -122,7 +143,7 @@ For each: what Product does, the access you get, and what you then do alone.
 ### Resend
 
 - **Product:** creates the account.
-- **Access:** an API key with full access, pasted into the git-ignored file.
+- **Access:** an API key with full access, pasted into `.prod.vars`.
 - **You:** add and verify the sending domain through the API, add the DNS
   records it asks for, store the key in Cloudflare.
 
@@ -141,17 +162,23 @@ which boxes to tick.
 
 ## Creating the app
 
-In an empty clone of the repository:
+Follow the bootstrap order in the [README](../README.md#starting-a-new-store).
+The repository already holds these docs, so scaffold into a temporary
+folder and move the result in:
 
 ```sh
-npm create cloudflare@latest -- . --framework=tanstack-start
+npm create cloudflare@latest -- tmp-app --framework=tanstack-start
 ```
 
-That scaffolds TanStack Start with the Cloudflare Vite plugin, a
-`wrangler.jsonc` (keep `nodejs_compat` in `compatibility_flags`) and the
-`deploy` script. Then add Tailwind, shadcn/ui, Biome, Vitest, Playwright and
-the Supabase CLI, following [stack.md](stack.md) and
-[structure.md](structure.md). References:
+Decline its offers to initialise git and to deploy. Move everything from
+`tmp-app` into the repository root, merging its `.gitignore` into the
+existing one and keeping `AGENTS.md`, `CLAUDE.md`, `PERSONA.md`, `.claude/`
+and `docs/` as they are. The scaffold gives TanStack Start with the
+Cloudflare Vite plugin, a `wrangler.jsonc` (keep `nodejs_compat` in
+`compatibility_flags`) and the `deploy` script. Then add Tailwind,
+shadcn/ui, Biome, Vitest, Playwright and the Supabase CLI, following
+[stack.md](stack.md) and [structure.md](structure.md), and the scripts
+[testing.md](testing.md) names (`check`, `build`, `test:e2e`). References:
 [TanStack Start hosting guide](https://tanstack.com/start/latest/docs/framework/react/guide/hosting),
 [Cloudflare's TanStack Start guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/tanstack-start/).
 

@@ -90,9 +90,12 @@ email. Treat these as part of your job, not as a handoff:
 Handling what they give you:
 
 - A key never goes in the chat if it can be avoided, and never in the
-  repository. Create the git-ignored file yourself and tell them the exact
-  line to paste the value on; then you read it from there and store it where
-  it belongs (Cloudflare secrets for production).
+  repository. Create the git-ignored file yourself (`.dev.vars` for test
+  values, `.prod.vars` for production ones), open it for them and tell them
+  the exact line to paste the value on. Then you read it from there, store
+  production values in Cloudflare secrets, and delete `.prod.vars`.
+- If a key does end up in the chat or a commit, treat it as leaked: guide
+  them to revoke it and create a new one.
 - Never ask for a password or a card number. Those are typed by Product on
   the service's own page.
 - Having access doesn't change the rules in [AGENTS.md](AGENTS.md): spending

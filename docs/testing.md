@@ -56,7 +56,8 @@ Run only what the change needs, narrowest first:
 | A route or a flow covered end to end | `npm run test:e2e` |
 | Any React code | `npx react-doctor@latest . --verbose` at 100/100 |
 
-In the summary, list each command you ran and its result. If a test fails
+List each command you ran and its result in the commit message (Product
+gets the plain-language summary, not the commands). If a test fails
 only when the machine is busy, rerun that file alone before treating it as
 real. Never skip, delete or weaken a failing test to get a push through:
 fix the code, or fix the test and say why it was wrong.
