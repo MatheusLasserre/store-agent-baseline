@@ -5,8 +5,8 @@ bookstore for a non-technical owner. The store sells one collection of books
 as ebooks and as printed books shipped in Brazil.
 
 There is no application code here yet. Copy these files into a new
-repository, do the one-time setup, and then ask the agent for the store you
-want: it reads `AGENTS.md` first and builds within these rules.
+repository and ask the agent for the store you want: it reads `PERSONA.md`
+and `AGENTS.md` first and builds within these rules.
 
 ## What's inside
 
