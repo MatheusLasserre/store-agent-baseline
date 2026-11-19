@@ -6,11 +6,53 @@ card); you do everything else and end each step holding the access you need
 to never send them back. [PERSONA.md](../PERSONA.md#when-something-outside-the-code-is-needed)
 says how to guide them and how to handle what they give you.
 
-Don't set everything up on day one. Do each service when the work first
-needs it, in this order, and keep the status table current.
+Setup happens up front, in one sitting where possible: Product would rather
+spend an hour once than be interrupted every other task. Prices and limits
+below were checked on 2026-11-19; check the linked pages again before
+quoting a price to Product.
 
-Prices and limits below were checked on 2026-11-19. Check the linked pages
-again before quoting a price to Product.
+## Preflight
+
+Run this before the first task, and a quick version of it at the start of
+every task (only the rows that task needs).
+
+1. **Inspect the machine.** Find the operating system and what's already
+   installed and signed in. Check each row of the tools table by running it
+   (`git --version`, `docker info`, `gh auth status`, ...), not by assuming.
+2. **Install what you can** from the terminal, with the system's standard
+   package manager (Homebrew on macOS, winget on Windows, apt or the
+   distribution's own on Linux). On Windows, work inside WSL2: Docker and
+   the CLIs behave there as they do in production tooling.
+3. **List what needs Product**, all of it, in the order to do it: installers
+   that need their password or a restart, then the accounts below. Give
+   exact steps for each and say roughly how long the whole list takes.
+4. **Verify** each item as it's done, update the status tables, and only
+   then start building.
+
+If the check finds something missing mid-project (a new machine, an expired
+sign-in), stop and fix it the same way before continuing.
+
+### Tools on the machine
+
+| Tool | Why | Usually needs Product? |
+| --- | --- | --- |
+| git, with name and email configured | Version history, deploys | No |
+| Node.js (the version pinned in `package.json`), through a version manager | Runs the app and all tooling | No |
+| Docker (Docker Desktop on macOS and Windows), running | The local database for development and tests | Yes: installer, password, sometimes a restart |
+| WSL2 (Windows only) | A Linux environment for everything above | Yes: restart |
+| GitHub CLI (`gh`) | Repository, sign-in | Sign-in only |
+| Playwright browsers (`npx playwright install`) | End-to-end tests | No |
+| Supabase CLI and Wrangler | Come with the project (`npx`) | Sign-in only |
+
+Keep this table current: when the work needs a new tool, add it here and
+install it properly rather than doing without.
+
+### Accounts
+
+All six services under [The services](#the-services) are created in the
+first sitting, with your access to each, so nothing later waits on an
+account. The one exception is the domain when Product hasn't chosen a name
+yet: record it in the backlog under "Waiting on Product" and carry on.
 
 ## Status
 
@@ -26,18 +68,27 @@ whether it exists and where it's stored.
 | Resend | not yet | not yet | |
 | Domain | not yet | not yet | |
 
+| Tool | Installed and working | Notes |
+| --- | --- | --- |
+| git | not checked | |
+| Node.js | not checked | |
+| Docker | not checked | |
+| WSL2 (Windows only) | not checked | |
+| GitHub CLI | not checked | |
+| Playwright browsers | not checked | |
+
 ## The services
 
 For each: what Product does, the access you get, and what you then do alone.
 
-### GitHub (first)
+### GitHub
 
 - **Product:** creates a GitHub account if they have none.
 - **Access:** `gh auth login` (opens their browser).
 - **You:** create the store's private repository, push, and manage it from
   then on.
 
-### Supabase (when the first table is needed)
+### Supabase
 
 - **Product:** creates the account (signing in with GitHub is the shortest
   path).
@@ -47,7 +98,7 @@ For each: what Product does, the access you get, and what you then do alone.
   create storage buckets. Create Product's admin user and add it to
   `store_admin`; they set their own password through the reset email.
 
-### Cloudflare (when there is something to show)
+### Cloudflare
 
 - **Product:** creates the account and confirms their email.
 - **Access:** `npx wrangler login` (opens their browser).
@@ -56,7 +107,7 @@ For each: what Product does, the access you get, and what you then do alone.
   (Workers Builds) needs a few clicks in the dashboard: guide Product through
   them once. Until then, deploy with `npm run deploy`.
 
-### Mercado Pago (when checkout is built)
+### Mercado Pago
 
 - **Product:** uses or creates their Mercado Pago account, since the money
   lands there. In Suas integrações they create an application for Checkout
@@ -68,14 +119,14 @@ For each: what Product does, the access you get, and what you then do alone.
   `https://<domain>/api/mercado-pago/webhook`), store the secrets in
   Cloudflare, run the test purchases.
 
-### Resend (when the first email is built)
+### Resend
 
 - **Product:** creates the account.
 - **Access:** an API key with full access, pasted into the git-ignored file.
 - **You:** add and verify the sending domain through the API, add the DNS
   records it asks for, store the key in Cloudflare.
 
-### Domain (before launch)
+### Domain
 
 - **Product:** chooses the name and pays for it. This is a product and money
   decision: offer two or three available options with prices.

@@ -12,7 +12,9 @@ details. All new logic has tests.
   fail the test, so an accidental real call is visible.
 - **Playwright** for a few end-to-end flows in a real browser.
 - The **local Supabase stack** (`npx supabase start`, needs Docker) for
-  anything that touches the database. Don't mock the database.
+  anything that touches the database. Don't mock the database, and don't
+  skip these tests when Docker is missing: getting Docker installed is part
+  of the preflight ([setup.md](setup.md#preflight)).
 
 ## What to test
 

@@ -40,6 +40,9 @@ relevant doc in the same change.
   customer or Product reads on screen is in pt-BR.
 - Ask before coding only when a request can be read two ways that would look
   different to a customer. Otherwise decide, and state the assumption.
+- Product will set up whatever you need (tools on their machine, accounts)
+  as long as you ask once, up front, with exact steps. Use a professional
+  setup and never work around a missing piece that a one-time setup fixes.
 - Never ask Product to edit code, run a command they don't understand or read
   an error. When something needs a person (an account, a payment, a
   confirmation), guide them through it and get lasting access in the same
@@ -75,6 +78,10 @@ relevant doc in the same change.
 
 ## How to work on a request
 
+0. **Preflight.** Check that the tools and accounts this task needs are in
+   place ([docs/setup.md](docs/setup.md#preflight)). Install what you can;
+   ask Product for everything else in one list, now, before building. Don't
+   work around a missing tool or account.
 1. **State intent.** Open with one sentence saying what you'll do next.
 2. **Plan.** Keep a short task list with concrete steps and update it as you go.
 3. **Gather context.** Read the docs for the area, then the code. Prefer

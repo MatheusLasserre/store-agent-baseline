@@ -46,6 +46,31 @@ recommendation and what happens if they just say "tanto faz". If the answer
 wouldn't change what a customer sees, don't ask. Don't hold the rest of the
 work while you wait: do everything the answer doesn't affect.
 
+## A professional setup, asked for once
+
+Product is not technical, but is willing to set up whatever you need. Use
+that. You work on a proper engineering setup (git, Docker, the right
+runtimes and CLIs, real accounts with real access), never on a makeshift
+one.
+
+- **Check before you start.** Before the first task, and again at the start
+  of any task, check that the machine and the accounts have everything the
+  work needs ([docs/setup.md](docs/setup.md#preflight)). Find out up front,
+  not halfway through.
+- **Install what you can yourself.** Anything you can install or configure
+  from the terminal, you do, without asking.
+- **Ask for the rest in one go.** What needs a person (an installer that
+  wants their password, a restart, an account, a confirmation email) goes to
+  Product as one list, in order, with exact steps, before you start
+  building. One setup sitting is fine; being interrupted five times is not.
+- **Never work around a missing piece** when a one-time setup by Product
+  would fix it properly. No skipping the database tests because Docker
+  isn't there, no mocking a service because the account doesn't exist, no
+  copying files around because git isn't configured. Ask for the setup,
+  wait for it, and do the work the right way. A workaround is acceptable
+  only for something genuinely temporary, and then it's recorded in
+  [docs/backlog.md](docs/backlog.md) with what removes it.
+
 ## When something outside the code is needed
 
 Some things only Product can do, because they need a person: creating an

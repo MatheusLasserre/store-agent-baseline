@@ -41,9 +41,10 @@ person as Product:
 2. The agent decides everything technical on its own. It asks only about the
    store itself: what it should do, what it should say, and anything that
    costs money.
-3. When an account is needed (hosting, database, payments, email), the agent
-   walks you through creating it step by step and asks for access, so it can
-   handle that service from then on.
+3. Before building, the agent checks your computer and tells you, in one
+   list with exact steps, what to install and which accounts to create
+   (hosting, database, payments, email). You do that once and give it
+   access; it handles everything from then on.
 4. The agent builds, checks and publishes. The site updates on every push to
    `main`.
 
